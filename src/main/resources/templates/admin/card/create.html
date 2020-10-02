@@ -1,75 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
+        <title>Admin | Card | Create</title>
+        <!--/*/ <th:block th:replace="layouts/admin :: headerSection"> /*/-->
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Dashboard</title>    
         <!-- Bootstrap-->
-        <link th:href="@{/atm_machine_dist/lib/bootstrap/dist/css/bootstrap.min.css}"
-              href="../../../static/atm_machine_dist/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
         <!--Common Plugins CSS -->
-        <link th:href="@{/atm_machine_dist/css/plugins/plugins.css}"
-              href="../../../static/atm_machine_dist/css/plugins/plugins.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/css/plugins/plugins.css" rel="stylesheet">
         <!--fonts-->
-        <link th:href="@{/atm_machine_dist/lib/line-icons/line-icons.css}"
-              href="../../../static/atm_machine_dist/lib/line-icons/line-icons.css" rel="stylesheet">
-        <link th:href="@{/atm_machine_dist/lib/font-awesome/css/fontawesome-all.min.css}"
-              href="../../../static/atm_machine_dist/lib/font-awesome/css/fontawesome-all.min.css" rel="stylesheet">
-        <link th:href="@{/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.css}"
-              href="../../../static/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.css" rel="stylesheet">
-        <link th:href="@{/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.css}"
-              href="../../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.css" rel="stylesheet">
-        <link th:href="@{/atm_machine_dist/css/style.css}"
-              href="../../../static/atm_machine_dist/css/style.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/lib/line-icons/line-icons.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/lib/font-awesome/css/fontawesome-all.min.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/css/style.css" rel="stylesheet">
+        <!--/*/ </th:block> /*/-->
     </head>
     <body>
 
         <div class="page-wrapper" id="page-wrapper">
-            <aside id="page-aside" class=" page-aside aside-fixed">
-                <div class="sidenav darkNav">
-                    <a href="index.html" class="app-logo d-flex flex flex-row align-items-center overflow-hidden justify-content-center">
-                        <i class="icon-Paper-Plane inline-icon rounded avatar32 d-inline-flex align-items-center justify-content-center"></i>
-                        <span class="logo-text d-inline-flex"> <span class='font700 d-inline-block mr-1'>Rest Tomato</span> UI</span>
-                    </a>
-                    <div class="flex">
-                        <div class="aside-content slim-scroll">
-                            <ul class="metisMenu" id="metisMenu">
-                                <li class="nav-title">Main<span class="nav-thumbnail">MN</span></li>
-                                <li> <i class="icon-Gaugage nav-thumbnail"></i>
-                                    <a class="has-arrow" href="javascript:void(0)">
-
-                                        <span class="nav-text">
-                                            Dashboard 
-                                        </span>
-                                    </a>
-                                    <ul aria-expanded="false">
-                                        <li>
-                                            <span class="nav-thumbnail">01</span>
-                                            <a href="index.html">Table</a>
-                                        </li>
-                                    </ul>
-                                </li><!--Menu-item-->
-
-                            </ul>
-                        </div><!-- aside content end-->
-                    </div><!-- aside hidden scroll end-->
-                </div><!-- sidenav end-->
-            </aside><!-- page-aside end-->
+            <!-- Side bar Begin -->
+            <!--/*/ <th:block th:replace="layouts/admin :: sidebar"> /*/--> <!--/*/ </th:block> /*/-->
+            <!-- Side bar End -->
             <main class="content">
-                <header class="navbar page-header whiteHeader navbar-expand-lg">
-                    <ul class="nav flex-row mr-auto">
-                        <li class="nav-item">
-                            <a href="javascript:void(0)" class="nav-link sidenav-btn h-lg-down">
-                                <span class="navbar-toggler-icon"></span>
-                            </a>
-                            <a class="nav-link sidenav-btn h-lg-up" href="#page-aside"  data-toggle="dropdown" data-target="#page-aside">
-                                <span class="navbar-toggler-icon"></span>
-                            </a>
-                        </li>
-                    </ul>
-                    
-                </header>
+                <!-- Nav Bar Begin -->
+                <!--/*/ <th:block th:replace="layouts/admin :: navbar"> /*/--> <!--/*/ </th:block> /*/-->
+                <!-- Nav Bar End -->
                 <div class="page-subheader mb-30">
                     <div class="container-fluid">
                         <div class="row align-items-center">
@@ -96,19 +54,39 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="portlet-box portlet-gutter ui-buttons-col mb-30">
-                                    <form action="" method="POST">
+                                    <form th:action="@{/admin/card/store}"
+                                          th:object="${form}"
+                                          method="POST">
                                     <div class="portlet-body">
                                         <div class="form-group">
-                                            <label>Card Holder Name</label>
-                                            <input type="text" class="form-control">
+                                            <label for="pinCode">Pin Code</label>
+                                            <input type="password"
+                                                   th:field="*{pinCode}"
+                                                   id="pinCode" class="form-control">
+                                            <label class="error" for="pinCode"
+                                                   th:if="${#fields.hasErrors('pinCode')}"
+                                                   th:errors="*{pinCode}">Error</label>
                                         </div>
                                         <div class="form-group">
-                                            <label>Pin Code</label>
-                                            <input type="password" class="form-control">
+                                            <label for="retypedPinCode">Retype Pin Code</label>
+                                            <input type="password"
+                                                   th:field="*{retypedPinCode}"
+                                                   id="retypedPinCode" class="form-control">
+                                            <label class="error" for="retypedPinCode"
+                                                   th:if="${#fields.hasErrors('retypedPinCode')}"
+                                                   th:errors="*{retypedPinCode}">Error</label>
                                         </div>
                                         <div class="form-group">
-                                            <label>Retype Pin Code</label>
-                                            <input type="password" class="form-control">
+                                            <label for="bankAccount">Retype Pin Code</label>
+                                            <br/>
+                                            <select id="bankAccount" class="select2" th:field="*{bankAccountIban}">
+                                                <option th:each="bankAccount : ${bankAccounts}"
+                                                        th:value="${bankAccount.iban}"
+                                                        th:text="${bankAccount.holderName}"></option>
+                                            </select>
+                                            <label class="error" for="bankAccount"
+                                                   th:if="${#fields.hasErrors('bankAccountIban')}"
+                                                   th:errors="*{bankAccountIban}">Error</label>
                                         </div>
                                     </div>
                                     <div class="portlet-body">
@@ -123,21 +101,21 @@
                 
             </main><!-- page content end-->
         </div><!-- app's main wrapper end -->
+        <!--/*/ <th:block th:replace="layouts/admin :: scripts"> /*/-->
         <!-- Common plugins -->
-        <script type="text/javascript" th:src="@{/atm_machine_dist/js/plugins/plugins.js}"
-                src="../../../static/atm_machine_dist/js/plugins/plugins.js"></script>
-        <script type="text/javascript" th:src="@{/atm_machine_dist/js/appUi-custom.js}"
-                src="../../../static/atm_machine_dist/js/appUi-custom.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/js/plugins/plugins.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/js/appUi-custom.js"></script>
         <!-- Required datatable js -->
-        <script type="text/javascript" th:src="@{/atm_machine_dist/lib/data-tables/jquery.dataTables.min.js}"
-                src="../../../static/atm_machine_dist/lib/data-tables/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" th:src="@{/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.js}"
-                src="../../../static/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.js"></script>
-        <script type="text/javascript" th:src="@{/atm_machine_dist/lib/data-tables/dataTables.responsive.min.js}"
-                src="../../../static/atm_machine_dist/lib/data-tables/dataTables.responsive.min.js"></script>
-        <script type="text/javascript" th:src="@{/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.js}"
-                src="../../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.js"></script>
-        <script th:src="@{/atm_machine_dist/js/plugins-custom/datatables-custom.js}"
-                src="../../../static/atm_machine_dist/js/plugins-custom/datatables-custom.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/dataTables.responsive.min.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.js"></script>
+        <script src="../../../static/atm_machine_dist/js/plugins-custom/datatables-custom.js"></script>
+        <!--/*/ </th:block> /*/-->
+        <script>
+            $(document).ready(function () {
+                $(".select2").select2();
+            })
+        </script>
     </body>
 </html>

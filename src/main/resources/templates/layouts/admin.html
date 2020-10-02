@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <!--/*/ <th:block th:fragment="headerSection"> /*/-->
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap-->
+    <link th:href="@{/atm_machine_dist/lib/bootstrap/dist/css/bootstrap.min.css}"
+          href="../../static/atm_machine_dist/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--Common Plugins CSS -->
+    <link th:href="@{/atm_machine_dist/css/plugins/plugins.css}"
+          href="../../static/atm_machine_dist/css/plugins/plugins.css" rel="stylesheet">
+    <!--fonts-->
+    <link th:href="@{/atm_machine_dist/lib/line-icons/line-icons.css}"
+          href="../../static/atm_machine_dist/lib/line-icons/line-icons.css" rel="stylesheet">
+    <link th:href="@{/atm_machine_dist/lib/font-awesome/css/fontawesome-all.min.css}"
+          href="../../static/atm_machine_dist/lib/font-awesome/css/fontawesome-all.min.css" rel="stylesheet">
+    <link th:href="@{/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.css}"
+          href="../../static/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link th:href="@{/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.css}"
+          href="../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.css" rel="stylesheet">
+    <link th:href="@{/atm_machine_dist/css/style.css}"
+          href="../../static/atm_machine_dist/css/style.css" rel="stylesheet">
+    <link th:href="@{/atm_machine_dist/lib/select2/dist/css/select2.min.css}"
+          href="../../static/atm_machine_dist/lib/select2/dist/css/select2.min.css" rel="stylesheet">
+    <!--/*/ </th:block> /*/-->
+</head>
+<body>
+
+<div class="page-wrapper" id="page-wrapper">
+    <!--/*/ <th:block th:fragment="sidebar"> /*/-->
+    <!-- Side Bar Menu Begin-->
+    <aside id="page-aside" class=" page-aside aside-fixed">
+        <div class="sidenav darkNav">
+            <a href="index.html" class="app-logo d-flex flex flex-row align-items-center overflow-hidden justify-content-center">
+                <i class="icon-Paper-Plane inline-icon rounded avatar32 d-inline-flex align-items-center justify-content-center"></i>
+                <span class="logo-text d-inline-flex"> <span class='font700 d-inline-block mr-1'>ATM Machine </span> Demo</span>
+            </a>
+            <div class="flex">
+                <div class="aside-content slim-scroll">
+                    <ul class="metisMenu" id="metisMenu">
+                        <li class="nav-title">Main<span class="nav-thumbnail">MN</span></li>
+                        <li> <i class="icon-Gaugage nav-thumbnail"></i>
+                            <a class="has-arrow" href="javascript:void(0)">
+
+                                        <span class="nav-text">
+                                            Dashboard
+                                        </span>
+                            </a>
+                            <ul aria-expanded="false">
+                                <li>
+                                    <span class="nav-thumbnail">ATM</span>
+                                    <a th:href="@{/}">ATM</a>
+                                </li>
+                                <li>
+                                    <span class="nav-thumbnail">BA</span>
+                                    <a th:href="@{/admin/bank-account/index}">Bank Accounts</a>
+                                </li>
+                                <li>
+                                    <span class="nav-thumbnail">CC</span>
+                                    <a th:href="@{/admin/card/index}">Cards</a>
+                                </li>
+                            </ul>
+                        </li><!--Menu-item-->
+
+                    </ul>
+                </div><!-- aside content end-->
+            </div><!-- aside hidden scroll end-->
+        </div><!-- sidenav end-->
+    </aside>
+    <!-- Side Bar Menu End-->
+    <!--/*/ </th:block> /*/-->
+
+    <main class="content">
+        <!--/*/ <th:block th:fragment="navbar"> /*/-->
+        <!-- Nav Bar Begin -->
+        <header class="navbar page-header whiteHeader navbar-expand-lg">
+            <ul class="nav flex-row mr-auto">
+                <li class="nav-item">
+                    <a href="javascript:void(0)" class="nav-link sidenav-btn h-lg-down">
+                        <span class="navbar-toggler-icon"></span>
+                    </a>
+                    <a class="nav-link sidenav-btn h-lg-up" href="#page-aside"  data-toggle="dropdown" data-target="#page-aside">
+                        <span class="navbar-toggler-icon"></span>
+                    </a>
+                </li>
+            </ul>
+        </header>
+        <!-- Nav Bar End -->
+        <!--/*/ </th:block> /*/-->
+        <div class="page-subheader mb-30">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-7">
+                        <div class="list">
+                            <div class="list-item pl-0">
+                                <div class="list-thumb ml-0 mr-3 pr-3  b-r text-muted">
+                                    <i class="icon-Server-2"></i>
+                                </div>
+                                <div class="list-body">
+                                    <div class="list-title fs-2x">
+                                        <h3>Card Table</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main><!-- page content end-->
+</div><!-- app's main wrapper end -->
+<!--/*/ <th:block th:fragment="scripts"> /*/-->
+<!-- Common plugins -->
+<script type="text/javascript" th:src="@{/atm_machine_dist/js/plugins/plugins.js}"
+        src="../../static/atm_machine_dist/js/plugins/plugins.js"></script>
+<script type="text/javascript" th:src="@{/atm_machine_dist/js/appUi-custom.js}"
+        src="../../static/atm_machine_dist/js/appUi-custom.js"></script>
+<!-- Required datatable js -->
+<script type="text/javascript" th:src="@{/atm_machine_dist/lib/data-tables/jquery.dataTables.min.js}"
+        src="../../static/atm_machine_dist/lib/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" th:src="@{/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.js}"
+        src="../../static/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" th:src="@{/atm_machine_dist/lib/data-tables/dataTables.responsive.min.js}"
+        src="../../static/atm_machine_dist/lib/data-tables/dataTables.responsive.min.js"></script>
+<script type="text/javascript" th:src="@{/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.js}"
+        src="../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.js"></script>
+<script th:src="@{/atm_machine_dist/js/plugins-custom/datatables-custom.js}"
+        src="../../static/atm_machine_dist/js/plugins-custom/datatables-custom.js"></script>
+<!-- Pagination js -->
+<script src="../../static/atm_machine_dist/js/pagination.js" type="text/javascript"
+        th:src="@{/atm_machine_dist/js/pagination.js}"></script>
+<!-- Select 2 js -->
+<script src="../../atm_machine_dist/lib/select2/dist/js/select2.full.min.js" type="text/javascript"
+        th:src="@{/atm_machine_dist/lib/select2/dist/js/select2.full.min.js}"></script>
+<!--/*/ </th:block> /*/-->
+</body>
+</html>

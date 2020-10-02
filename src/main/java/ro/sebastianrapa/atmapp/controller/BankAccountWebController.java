@@ -76,7 +76,7 @@ public class BankAccountWebController {
     }
 
     @PostMapping("/store")
-    public ModelAndView store(@Valid@ModelAttribute("form") final BankAccountCreateForm form,
+    public ModelAndView store(@ModelAttribute("form") final BankAccountCreateForm form,
                               BindingResult bindingResult) {
 
         // Get the bank account holder name
@@ -110,7 +110,7 @@ public class BankAccountWebController {
     }
 
     @PostMapping(value = "/link-card", params = "bankAccountIban")
-    public ModelAndView linkCardToAccount(final String bankAccountIban,
+    public ModelAndView linkCardToAccount(@RequestParam final String bankAccountIban,
                                           @ModelAttribute("linkCardToAccountForm") final LinkCardToAccountForm linkCardToAccountForm,
                                           final BindingResult bindingResult) {
         // Validate input
@@ -160,6 +160,8 @@ public class BankAccountWebController {
             // Get the bank account
             account = bankAccountService.getBankAccountByIban(bankAccountIban);
         } catch (BankAccountNotFoundException e) {
+            System.out.println("Receveied exception: ");
+            System.out.println(e.getMessage());
             // TODO: Add a log and redirect to index page
             return redirectToIndexPage();
         }

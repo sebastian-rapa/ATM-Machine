@@ -194,6 +194,8 @@ public class Card {
     public String toString() {
         return "Card{" +
                 "cardHolderName='" + cardHolderName + '\'' +
+                "cardHolderName='" + cardHolderName + '\'' +
+                " bankAccountIban='" + bankAccountIban + '\'' +
                 " cardNumber='" + cardNumber + '\'' +
                 " expiryDate='" + expiryDate + '\'' +
                 " secureCode=" + secureCode +
