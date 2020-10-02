@@ -3,6 +3,7 @@ package ro.sebastianrapa.atmapp.model;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ro.sebastianrapa.atmapp.form.CardCreateForm;
+import ro.sebastianrapa.atmapp.form.LinkCardToAccountForm;
 
 import java.util.Calendar;
 import java.util.concurrent.ThreadLocalRandom;
@@ -15,7 +16,7 @@ public class Card {
     /**
      * Object used to compare an introduced pin code with the hashed pin code
      * */
-    private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+    private static final BCryptPasswordEncoder PIN_CODE_ENCODER = new BCryptPasswordEncoder();
 
     /**
      * Lower bound for a CVV
@@ -96,6 +97,18 @@ public class Card {
         this.secureCode = generateSecureCode();
     }
 
+    /**
+     * Constructor for a card using a form Object
+     * */
+    public Card(final LinkCardToAccountForm form) {
+        this.bankAccountIban = form.getBankAccountIban();
+        this.cardHolderName = form.getCardHolderName();
+        this.pinCode = hashPinCode(form.getPinCode());
+        this.cardNumber = generateCardNumber();
+        this.expiryDate = generateExpiryDate();
+        this.secureCode = generateSecureCode();
+    }
+
     public String getCardHolderName() {
         return cardHolderName;
     }
@@ -125,7 +138,7 @@ public class Card {
      * Method that compares an introduced pin code with the hashed pin code
      * */
     public boolean checkPinCode(final String pinCode) {
-        return PASSWORD_ENCODER.matches(pinCode, this.pinCode);
+        return PIN_CODE_ENCODER.matches(pinCode, this.pinCode);
     }
 
     private String generateCardNumber() {

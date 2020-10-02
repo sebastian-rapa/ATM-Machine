@@ -85,7 +85,7 @@
                                         </div>
                                         <div class="list-body">
                                             <div class="list-title fs-2x">
-                                                <h3>Card Table</h3>
+                                                <h3>Bank Accounts Table</h3>
                                             </div>
                                         </div>
                                     </div>
@@ -99,7 +99,7 @@
                     <div class="container-fluid">
                           <div class="bg-white table-responsive rounded shadow-sm pt-3 pb-3 mb-30">
                               <h6 class="pl-3 pr-3 text-capitalize font400 mb-20">
-                                  <a th:href="@{/admin/card/create}" style="font-size: 1.2rem;color: rgb(247, 132, 56);">
+                                  <a th:href="@{/admin/bank-account/create}" style="font-size: 1.2rem;color: rgb(247, 132, 56);">
                                       <i class="fas fa-plus"></i>
                                       <span>Create</span></a>
                               </h6>
@@ -107,17 +107,21 @@
                                 <thead>
                                     <tr>
                                         <th>Name Detinator</th>
-                                        <th>Numar Card</th>
-                                        <th>Data Expirare</th>
-                                        <th>CVV</th>
+                                        <th>IBAN</th>
+                                        <th>Currency</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody th:each="card : ${cards}">
+                                <tbody th:each="account : ${bankAccounts}">
                                     <tr>
-                                        <td th:text="${card.cardHolderName}">Nume Detinator</td>
-                                        <td th:text="${card.cardNumber}">Poza nume</td>
-                                        <td th:text="${card.expiryDate}"></td>
-                                        <td th:text="${card.secureCode}"></td>
+                                        <td th:text="${account.holderName}">Nume Detinator</td>
+                                        <td th:text="${account.iban}">iban</td>
+                                        <td th:text="${account.currency}"> currency </td>
+                                        <td>
+                                            <a th:href="@{/admin/bank-account/create-card(bankAccountIban=${account.iban})}">
+                                                Add a card to the bank account
+                                            </a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -26,12 +26,11 @@
     <body>
 
         <div class="page-wrapper" id="page-wrapper">
-            <!-- Side Bar Menu Begin-->
             <aside id="page-aside" class=" page-aside aside-fixed">
                 <div class="sidenav darkNav">
                     <a href="index.html" class="app-logo d-flex flex flex-row align-items-center overflow-hidden justify-content-center">
                         <i class="icon-Paper-Plane inline-icon rounded avatar32 d-inline-flex align-items-center justify-content-center"></i>
-                        <span class="logo-text d-inline-flex"> <span class='font700 d-inline-block mr-1'>ATM Machine </span> Demo</span>
+                        <span class="logo-text d-inline-flex"> <span class='font700 d-inline-block mr-1'>Rest Tomato</span> UI</span>
                     </a>
                     <div class="flex">
                         <div class="aside-content slim-scroll">
@@ -56,11 +55,8 @@
                         </div><!-- aside content end-->
                     </div><!-- aside hidden scroll end-->
                 </div><!-- sidenav end-->
-            </aside>
-            <!-- Side Bar Menu End-->
-
+            </aside><!-- page-aside end-->
             <main class="content">
-                <!-- Nav Bar Begin -->
                 <header class="navbar page-header whiteHeader navbar-expand-lg">
                     <ul class="nav flex-row mr-auto">
                         <li class="nav-item">
@@ -72,8 +68,8 @@
                             </a>
                         </li>
                     </ul>
+                    
                 </header>
-                <!-- Nav Bar End -->
                 <div class="page-subheader mb-30">
                     <div class="container-fluid">
                         <div class="row align-items-center">
@@ -85,7 +81,7 @@
                                         </div>
                                         <div class="list-body">
                                             <div class="list-title fs-2x">
-                                                <h3>Card Table</h3>
+                                                <h3>Create Meniu</h3>
                                             </div>
                                         </div>
                                     </div>
@@ -97,33 +93,41 @@
                 </div>
                 <div class="page-content">
                     <div class="container-fluid">
-                          <div class="bg-white table-responsive rounded shadow-sm pt-3 pb-3 mb-30">
-                              <h6 class="pl-3 pr-3 text-capitalize font400 mb-20">
-                                  <a th:href="@{/admin/card/create}" style="font-size: 1.2rem;color: rgb(247, 132, 56);">
-                                      <i class="fas fa-plus"></i>
-                                      <span>Create</span></a>
-                              </h6>
-                            <table id="data-table" class="table mb-0 table-striped" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Name Detinator</th>
-                                        <th>Numar Card</th>
-                                        <th>Data Expirare</th>
-                                        <th>CVV</th>
-                                    </tr>
-                                </thead>
-                                <tbody th:each="card : ${cards}">
-                                    <tr>
-                                        <td th:text="${card.cardHolderName}">Nume Detinator</td>
-                                        <td th:text="${card.cardNumber}">Poza nume</td>
-                                        <td th:text="${card.expiryDate}"></td>
-                                        <td th:text="${card.secureCode}"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="portlet-box portlet-gutter ui-buttons-col mb-30">
+                                    <form th:action="@{/admin/bank-account/link-card(bankAccountIban=${bankAccountIban})}"
+                                          th:object="${linkCardToAccountForm}" method="post">
+                                    <div class="portlet-body">
+                                        <input type="hidden" th:field="*{cardHolderName}" th:value="${bankAccount.holderName}"/>
+                                        <input type="hidden" th:field="*{bankAccountIban}" th:value="${bankAccount.iban}"/>
+                                        <div class="form-group">
+                                            <label>Pin Code</label>
+                                            <input type="password" id="pinCode" th:field="*{pinCode}" class="form-control" autocomplete="off">
+
+                                            <label class="error" for="pinCode"
+                                                   th:if="${#fields.hasErrors('pinCode')}"
+                                                   th:errors="*{pinCode}">Error</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Retype Pin Code</label>
+                                            <input type="password" id="retypedPinCode" th:field="*{retypedPinCode}" class="form-control" autocomplete="off">
+
+                                            <label class="error" for="retypedPinCode"
+                                                   th:if="${#fields.hasErrors('retypedPinCode')}"
+                                                   th:errors="*{retypedPinCode}">Error</label>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                    </form>
+                                </div><!--portlet-->
+                            </div>
+                        </div><!--row-->
                     </div>
-                </div>
+                </div><!-- main end-->
+                
             </main><!-- page content end-->
         </div><!-- app's main wrapper end -->
         <!-- Common plugins -->
@@ -142,8 +146,5 @@
                 src="../../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.js"></script>
         <script th:src="@{/atm_machine_dist/js/plugins-custom/datatables-custom.js}"
                 src="../../../static/atm_machine_dist/js/plugins-custom/datatables-custom.js"></script>
-        <!-- Pagination js -->
-        <script src="../../../static/atm_machine_dist/js/pagination.js" type="text/javascript"
-                th:src="@{/atm_machine_dist/js/pagination.js}"></script>
     </body>
 </html>
