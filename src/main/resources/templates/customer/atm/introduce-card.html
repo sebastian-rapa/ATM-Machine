@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Admin | ATM | Introduce Card</title>
+        <!--/*/ <th:block th:replace="layouts/admin :: headerSection"> /*/-->
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap-->
+        <link href="../../../static/atm_machine_dist/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!--Common Plugins CSS -->
+        <link href="../../../static/atm_machine_dist/css/plugins/plugins.css" rel="stylesheet">
+        <!--fonts-->
+        <link href="../../../static/atm_machine_dist/lib/line-icons/line-icons.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/lib/font-awesome/css/fontawesome-all.min.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/css/style.css" rel="stylesheet">
+        <!--/*/ </th:block> /*/-->
+    </head>
+    <body>
+
+        <div class="page-wrapper" id="page-wrapper">
+            <!-- Side bar Begin -->
+            <!--/*/ <th:block th:replace="layouts/admin :: sidebar"> /*/--> <!--/*/ </th:block> /*/-->
+            <!-- Side bar End -->
+            <main class="content">
+                <!-- Nav Bar Begin -->
+                <!--/*/ <th:block th:replace="layouts/admin :: navbar"> /*/--> <!--/*/ </th:block> /*/-->
+                <!-- Nav Bar End -->
+                <div class="page-subheader mb-30">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-md-7">
+                                <div class="list">
+                                    <div class="list-item pl-0">
+                                        <div class="list-thumb ml-0 mr-3 pr-3  b-r text-muted">
+                                            <i class="icon-Server-2"></i>
+                                        </div>
+                                        <div class="list-body">
+                                            <div class="list-title fs-2x">
+                                                <h3>Introduced Card</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="portlet-box portlet-gutter ui-buttons-col mb-30">
+                                    <form th:action="@{/customer/atm/authenticate-card}"
+                                          th:object="${form}"
+                                          method="post">
+                                    <div class="portlet-body">
+                                        <div class="form-group">
+                                            <label for="pinCode">Pin Code</label>
+                                            <input type="password"
+                                                   th:field="*{pinCode}"
+                                                   id="pinCode" class="form-control">
+                                            <label class="error" for="pinCode"
+                                                   th:if="${#fields.hasErrors('pinCode')}"
+                                                   th:errors="*{pinCode}">Error</label>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                    </form>
+                                </div><!--portlet-->
+                            </div>
+                        </div><!--row-->
+                    </div>
+                </div><!-- main end-->
+                
+            </main><!-- page content end-->
+        </div><!-- app's main wrapper end -->
+        <!--/*/ <th:block th:replace="layouts/admin :: scripts"> /*/-->
+        <!-- Common plugins -->
+        <script type="text/javascript" src="../../../static/atm_machine_dist/js/plugins/plugins.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/js/appUi-custom.js"></script>
+        <!-- Required datatable js -->
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/dataTables.responsive.min.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.js"></script>
+        <script src="../../../static/atm_machine_dist/js/plugins-custom/datatables-custom.js"></script>
+        <!--/*/ </th:block> /*/-->
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                $(".select2").select2();
+            })
+        </script>
+    </body>
+</html>

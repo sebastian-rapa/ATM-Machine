@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Admin | Bank Account | Link Card</title>
+        <!--/*/ <th:block th:replace="layouts/admin :: headerSection"> /*/-->
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap-->
+        <link href="../../../static/atm_machine_dist/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!--Common Plugins CSS -->
+        <link href="../../../static/atm_machine_dist/css/plugins/plugins.css" rel="stylesheet">
+        <!--fonts-->
+        <link href="../../../static/atm_machine_dist/lib/line-icons/line-icons.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/lib/font-awesome/css/fontawesome-all.min.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.css" rel="stylesheet">
+        <link href="../../../static/atm_machine_dist/css/style.css" rel="stylesheet">
+        <!--/*/ </th:block> /*/-->
+    </head>
+    <body>
+
+        <div class="page-wrapper" id="page-wrapper">
+            <!-- Side bar Begin -->
+            <!--/*/ <th:block th:replace="layouts/admin :: sidebar"> /*/--> <!--/*/ </th:block> /*/-->
+            <!-- Side bar End -->
+            <main class="content">
+                <!-- Nav Bar Begin -->
+                <!--/*/ <th:block th:replace="layouts/admin :: navbar"> /*/--> <!--/*/ </th:block> /*/-->
+                <!-- Nav Bar End -->
+                <div class="page-subheader mb-30">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-md-7">
+                                <div class="list">
+                                    <div class="list-item pl-0">
+                                        <div class="list-thumb ml-0 mr-3 pr-3  b-r text-muted">
+                                            <i class="icon-Server-2"></i>
+                                        </div>
+                                        <div class="list-body">
+                                            <div class="list-title fs-2x">
+                                                <h3>ATM Machine</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <div class="card">
+                            <div class="card-header card-header-text card-header-info">
+                                <div class="card-text">
+                                    <h4 class="card-title">Bank Account Information</h4>
+                                </div>
+                            </div>
+                            <div class="card-body table-responsive">
+                                <dl class="row">
+                                    <dt class="col-sm-3">Holder Name</dt>
+                                    <dd class="col-sm-9" th:text="${bankAccount.holderName}">Name</dd>
+
+                                    <dt class="col-sm-3" >IBAN</dt>
+                                    <dd class="col-sm-9" th:text="${bankAccount.iban}">Subdomain</dd>
+
+                                    <dt class="col-sm-3" >Balance</dt>
+                                    <dd class="col-sm-9" th:text="${bankAccount.balance}">Subdomain</dd>
+
+                                    <dt class="col-sm-3"><a th:href="@{/customer/atm/deposit}">Deposit</a></dt>
+                                    </br>
+                                    <dt class="col-sm-3"><a th:href="@{/customer/atm/withdraw}">Withdraw</a></dt>
+                                </dl>
+                            </div>
+                        </div><!--row-->
+                    </div>
+                </div><!-- main end-->
+                
+            </main><!-- page content end-->
+        </div><!-- app's main wrapper end -->
+        <!--/*/ <th:block th:replace="layouts/admin :: scripts"> /*/-->
+        <!-- Common plugins -->
+        <script type="text/javascript" src="../../../static/atm_machine_dist/js/plugins/plugins.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/js/appUi-custom.js"></script>
+        <!-- Required datatable js -->
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/dataTables.bootstrap4.min.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/dataTables.responsive.min.js"></script>
+        <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.js"></script>
+        <script src="../../../static/atm_machine_dist/js/plugins-custom/datatables-custom.js"></script>
+        <!--/*/ </th:block> /*/-->
+        <script th:inline="javascript">
+            // TODO: Think if this is necessary
+            let cardAuth = [[${cardAuth}]];
+            if (!cardAuth.isAuthenticated) window.location = "/customer/atm/index";
+        </script>
+    </body>
+</html>
