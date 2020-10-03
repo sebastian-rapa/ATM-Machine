@@ -3,7 +3,6 @@ package ro.sebastianrapa.atmapp.controller;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,9 +13,7 @@ import ro.sebastianrapa.atmapp.model.Card;
 import ro.sebastianrapa.atmapp.model.exception.runtime.BankAccountNotFoundException;
 import ro.sebastianrapa.atmapp.service.BankAccountService;
 import ro.sebastianrapa.atmapp.service.CardService;
-
-import javax.validation.Valid;
-import java.util.List;
+import ro.sebastianrapa.atmapp.service.ValidationService;
 
 
 /**
@@ -36,15 +33,21 @@ public class BankAccountWebController {
      * Card Service Interface that will be linked to an implementation
      * */
     private transient final CardService cardService;
+    /**
+     * Validation Service Interface that will be linked to an implementation
+     * */
+    private transient final ValidationService validationService;
 
 
     /**
      * Taking Advantage of Spring's Dependency Injection through class constructor
      * */
     public BankAccountWebController(final BankAccountService bankAccountService,
-                                    final CardService cardService) {
+                                    final CardService cardService,
+                                    final ValidationService validationService) {
         this.bankAccountService = bankAccountService;
         this.cardService = cardService;
+        this.validationService = validationService;
     }
 
     @InitBinder
@@ -114,7 +117,11 @@ public class BankAccountWebController {
                                           @ModelAttribute("linkCardToAccountForm") final LinkCardToAccountForm linkCardToAccountForm,
                                           final BindingResult bindingResult) {
         // Validate input
-        validatePinInput(linkCardToAccountForm, bindingResult);
+        validationService.validatePinCodeInput(
+                linkCardToAccountForm.getPinCode(),
+                linkCardToAccountForm.getRetypedPinCode(),
+                bindingResult
+        );
 
         if (bindingResult.hasErrors()) {
             return getCreateAccountsCardForm(linkCardToAccountForm, bankAccountIban);
@@ -160,9 +167,8 @@ public class BankAccountWebController {
             // Get the bank account
             account = bankAccountService.getBankAccountByIban(bankAccountIban);
         } catch (BankAccountNotFoundException e) {
-            System.out.println("Receveied exception: ");
-            System.out.println(e.getMessage());
             // TODO: Add a log and redirect to index page
+            System.out.println(e.getMessage());
             return redirectToIndexPage();
         }
 
