@@ -12,7 +12,7 @@ public class ValidationServiceImpl implements ValidationService {
                                       final BindingResult bindingResult) {
         try {
             int pinCodeAsInt = Integer.parseInt(pinCode);
-            if (pinCodeAsInt < 1000 || pinCodeAsInt > 9999) {
+            if (wrongPinFormat(pinCodeAsInt)) {
                 bindingResult.rejectValue("pinCode", "pin.code.format.error", "The pin code must be a 4 digit number.");
             }
         } catch (NumberFormatException e) {
@@ -20,7 +20,7 @@ public class ValidationServiceImpl implements ValidationService {
         }
         try {
             int retypedPinAsInt = Integer.parseInt(retypedPinCode);
-            if (retypedPinAsInt < 1000 || retypedPinAsInt > 9999) {
+            if (wrongPinFormat(retypedPinAsInt)) {
                 bindingResult.rejectValue("retypedPinCode", "pin.code.format.error", "The retyped pin code must be a 4 digit number.");
             }
         } catch (NumberFormatException e) {
@@ -32,4 +32,28 @@ public class ValidationServiceImpl implements ValidationService {
             bindingResult.rejectValue("retypedPinCode", "retyped.pin.code.not.match.error", "The retyped pin code doesn't match.");
         }
     }
+
+    @Override
+    public void validatePinCodeFormat(final String introducedPinCode,
+                                      final BindingResult bindingResult) {
+        try {
+            int pinCodeAsInt = Integer.parseInt(introducedPinCode);
+            if (wrongPinFormat(pinCodeAsInt)) {
+                bindingResult.rejectValue(
+                        "pinCode",
+                        "pin.code.format.error",
+                        "The pin code must be a 4 digit number.");
+            }
+        } catch (NumberFormatException e) {
+            bindingResult.rejectValue(
+                    "pinCode",
+                    "pin.code.format.error",
+                    "The pin code must be a 4 digit number. Use only digits.");
+        }
+    }
+
+    private boolean wrongPinFormat(Integer pinCode) {
+        return pinCode < 1000 || pinCode > 9999;
+    }
+
 }

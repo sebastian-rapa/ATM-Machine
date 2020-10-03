@@ -6,6 +6,7 @@ import ro.sebastianrapa.atmapp.form.CardCreateForm;
 import ro.sebastianrapa.atmapp.form.LinkCardToAccountForm;
 
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -81,9 +82,13 @@ public class Card {
      * */
     private final int secureCode;
     /**
-     * This is the pin code of the card wich is hased
+     * This is the pin code of the card which is hashed
      * */
     private final String pinCode;
+    /**
+     * This field will say if a card is blocked or not
+     * */
+    private boolean blockedCard;
 
     /**
      * Constructor for a card using a form Object
@@ -95,6 +100,7 @@ public class Card {
         this.cardNumber = generateCardNumber();
         this.expiryDate = generateExpiryDate();
         this.secureCode = generateSecureCode();
+        this.blockedCard = false;
     }
 
     /**
@@ -107,6 +113,7 @@ public class Card {
         this.cardNumber = generateCardNumber();
         this.expiryDate = generateExpiryDate();
         this.secureCode = generateSecureCode();
+        this.blockedCard = false;
     }
 
     public String getCardHolderName() {
@@ -127,6 +134,18 @@ public class Card {
 
     public String getBankAccountIban() {
         return bankAccountIban;
+    }
+
+    public boolean isBlockedCard() {
+        return blockedCard;
+    }
+
+    public void setBlockedCard(boolean blockedCard) {
+        this.blockedCard = blockedCard;
+    }
+
+    public boolean unblockedCard() {
+        return !blockedCard;
     }
 
     private String hashPinCode(final String clearPinCode) {
@@ -194,12 +213,30 @@ public class Card {
     public String toString() {
         return "Card{" +
                 "cardHolderName='" + cardHolderName + '\'' +
-                "cardHolderName='" + cardHolderName + '\'' +
                 " bankAccountIban='" + bankAccountIban + '\'' +
                 " cardNumber='" + cardNumber + '\'' +
                 " expiryDate='" + expiryDate + '\'' +
                 " secureCode=" + secureCode +
+                " blockedCard=" + blockedCard +
                 " pinCode='" + pinCode + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Card)) return false;
+        Card card = (Card) o;
+        return getSecureCode() == card.getSecureCode() &&
+                getCardHolderName().equals(card.getCardHolderName()) &&
+                getCardNumber().equals(card.getCardNumber()) &&
+                getExpiryDate().equals(card.getExpiryDate()) &&
+                getBankAccountIban().equals(card.getBankAccountIban()) &&
+                pinCode.equals(card.pinCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCardHolderName(), getCardNumber(), getExpiryDate(), getBankAccountIban(), getSecureCode(), pinCode);
     }
 }

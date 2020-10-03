@@ -5,4 +5,6 @@ import org.springframework.validation.BindingResult;
 public interface ValidationService {
 
     void validatePinCodeInput(String pinCode, String retypedPinCode, BindingResult bindingResult);
+
+    void validatePinCodeFormat(String introducedPinCode, BindingResult bindingResult);
 }
