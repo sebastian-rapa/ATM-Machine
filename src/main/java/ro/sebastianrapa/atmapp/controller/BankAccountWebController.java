@@ -136,31 +136,6 @@ public class BankAccountWebController {
         return redirectToIndexPage();
     }
 
-    private void validatePinInput(final LinkCardToAccountForm linkCardToAccountForm,
-                                  final BindingResult bindingResult) {
-        try {
-            int pinCodeAsInt = Integer.parseInt(linkCardToAccountForm.getPinCode());
-            if (pinCodeAsInt < 1000 || pinCodeAsInt > 9999) {
-                bindingResult.rejectValue("pinCode", "pin.code.format.error", "The pin code must be a 4 digit number.");
-            }
-        } catch (NumberFormatException e) {
-            bindingResult.rejectValue("pinCode", "pin.code.format.error", "The pin code must be a 4 digit number. Use only digits.");
-        }
-        try {
-            int retypedPinAsInt = Integer.parseInt(linkCardToAccountForm.getRetypedPinCode());
-            if (retypedPinAsInt < 1000 || retypedPinAsInt > 9999) {
-                bindingResult.rejectValue("retypedPinCode", "pin.code.format.error", "The retyped pin code must be a 4 digit number.");
-            }
-        } catch (NumberFormatException e) {
-            bindingResult.rejectValue("retypedPinCode", "retyped.pin.code.format.error", "The retyped pin code must be a 4 digit number.");
-        }
-
-        if (!linkCardToAccountForm.getPinCode().equals(linkCardToAccountForm.getRetypedPinCode())) {
-            bindingResult.rejectValue("pinCode", "pin.code.not.match.error", "The pin code doesn't match.");
-            bindingResult.rejectValue("retypedPinCode", "retyped.pin.code.not.match.error", "The retyped pin code doesn't match.");
-        }
-    }
-
     private ModelAndView getCreateAccountsCardForm(final LinkCardToAccountForm linkCardToAccountForm, final String bankAccountIban){
         BankAccount account;
         try {
@@ -184,7 +159,6 @@ public class BankAccountWebController {
         // Return the model and view
         return modelAndView;
     }
-
 
     private ModelAndView getCreateForm(final BankAccountCreateForm form) {
         final ModelAndView modelAndView = new ModelAndView("admin/bankaccount/create");
