@@ -11,37 +11,39 @@ import ro.sebastianrapa.atmapp.form.DepositForm;
 import ro.sebastianrapa.atmapp.form.WithdrawForm;
 import ro.sebastianrapa.atmapp.model.BankAccount;
 import ro.sebastianrapa.atmapp.model.Card;
+import ro.sebastianrapa.atmapp.model.Log;
 import ro.sebastianrapa.atmapp.model.exception.runtime.BankAccountNotFoundException;
 import ro.sebastianrapa.atmapp.model.exception.runtime.CardNotFoundException;
 import ro.sebastianrapa.atmapp.model.exception.runtime.NotSufficientFundsException;
 import ro.sebastianrapa.atmapp.security.CardAuthentication;
-import ro.sebastianrapa.atmapp.service.ATMService;
-import ro.sebastianrapa.atmapp.service.BankAccountService;
-import ro.sebastianrapa.atmapp.service.CardService;
-import ro.sebastianrapa.atmapp.service.ValidationService;
+import ro.sebastianrapa.atmapp.service.*;
 
 @Controller
 @RequestMapping("customer/atm")
 public class ATMController {
 
     private static final boolean REQUIRES_AUTH = true;
+    private static final String NOT_AUTH_CARD_MESSAGE = "Card is not authenticated";
 
     private transient final ATMService atmService;
     private transient final BankAccountService bankAccountService;
     private transient final CardService cardService;
     private transient final CardAuthenticationConfig cardAuthConfig;
     private transient final ValidationService validationService;
+    private transient final LogService logService;
 
     public ATMController(final ATMService atmService,
                          final BankAccountService bankAccountService,
                          final CardService cardService,
                          final CardAuthenticationConfig cardAuthConfig,
-                         final ValidationService validationService) {
+                         final ValidationService validationService,
+                         final LogService logService) {
         this.atmService = atmService;
         this.bankAccountService = bankAccountService;
         this.cardService = cardService;
         this.cardAuthConfig = cardAuthConfig;
         this.validationService = validationService;
+        this.logService = logService;
     }
 
     @GetMapping("/index")
@@ -79,20 +81,18 @@ public class ATMController {
 
         // Check if the pin code is correct
         if (!introducedCard.checkPinCode(introducedPin)) {
-            bindingResult.rejectValue("pinCode", "wrong.pin.code.error", "Wrong ping code introduced.");
+            bindingResult.rejectValue("pinCode", "wrong.pin.code.error", "Wrong ping code introduced. Attempts left: " + cardAuth.getAttemptsLeft());
             // Count the wrong input
             cardAuth.wrongPinAttempt();
             // Check if there were to many wrong attempts
             if (cardAuth.tooManyWrongAttempts()) {
                 // Block Card
                 cardService.blockCard(introducedCard);
-                // TODO: Add Log
-
+                // Add Log to inform about blocking card
+                logService.addNewLog(new Log("Blocked card for to many wrong attempts"));
                 // Redirect to index page
                 return redirectToIndexPage();
             }
-            // TODO: Add Log
-
             // Return to the introduced-card page
             return getIntroducedCardPage(cardNumber, form);
         }
@@ -105,7 +105,8 @@ public class ATMController {
         try {
             associatedAccount = bankAccountService.getBankAccountByIban(introducedCard.getBankAccountIban());
         } catch (BankAccountNotFoundException e) {
-            // TODO: Add log
+            // Add log
+            logService.addNewLog(new Log(e.getMessage()));
 
             return redirectToIndexPage();
         }
@@ -131,7 +132,6 @@ public class ATMController {
         validationService.validateDepositAmount(depositAmount, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            // TODO: Add log
             return getDepositForm(form);
         }
         // Get the bank account iban of the authenticated card
@@ -143,7 +143,8 @@ public class ATMController {
         try {
             accountToDepositOn = bankAccountService.getBankAccountByIban(bankAccountIban);
         } catch (BankAccountNotFoundException e) {
-            // TODO: Add log
+            // Add log
+            logService.addNewLog(new Log(e.getMessage()));
             return redirectToIndexPage();
         }
         // Make the deposit
@@ -171,7 +172,6 @@ public class ATMController {
         validationService.validateWithdrawAmount(withdrawAmount, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            // TODO: Add log
             return getWithdrawForm(form);
         }
         // Get the bank account iban of the authenticated card
@@ -183,14 +183,16 @@ public class ATMController {
         try {
             accountToWithdrawFrom = bankAccountService.getBankAccountByIban(bankAccountIban);
         } catch (BankAccountNotFoundException e) {
-            // TODO: Add log
+            // Add log
+            logService.addNewLog(new Log(e.getMessage()));
             return redirectToIndexPage();
         }
         // Make the withdraw
         try {
             atmService.withdraw(accountToWithdrawFrom, Integer.parseInt(withdrawAmount));
         } catch (NotSufficientFundsException e) {
-            // TODO: Add log
+            // Add log
+            logService.addNewLog(new Log(e.getMessage()));
             bindingResult.rejectValue("withdrawAmount", "withdraw.too.large.error", "Not sufficient funds");
             return getWithdrawForm(form);
         }
@@ -208,7 +210,8 @@ public class ATMController {
         CardAuthentication cardAuth = cardAuthConfig.getCardAuthentication();
 
         if (!cardAuth.isAuthenticated()) {
-            // TODO: Add log
+            // Add log
+            logService.addNewLog(new Log(NOT_AUTH_CARD_MESSAGE));
             return redirectToIndexPage();
         }
 
@@ -221,7 +224,8 @@ public class ATMController {
         CardAuthentication cardAuth = cardAuthConfig.getCardAuthentication();
 
         if (!cardAuth.isAuthenticated()) {
-            // TODO: Add log
+            // Add log
+            logService.addNewLog(new Log(NOT_AUTH_CARD_MESSAGE));
             return redirectToIndexPage();
         }
 
@@ -241,7 +245,8 @@ public class ATMController {
             // Get the introducedCard from the service
             introducedCard = cardService.getCardByCardNumber(cardNumber);
         } catch (CardNotFoundException e) {
-            // TODO: Add log
+            // Add log
+            logService.addNewLog(new Log(e.getMessage()));
             return redirectToIndexPage();
         }
 

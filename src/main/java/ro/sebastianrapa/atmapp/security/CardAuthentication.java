@@ -35,6 +35,10 @@ public class CardAuthentication {
         this.requiresAuthentication = requiresAuthentication;
     }
 
+    public int getAttemptsLeft() {
+        return MAX_AMOUNT_OF_WRONG_INPUT - wrongPinInputs;
+    }
+
     public void wrongPinAttempt() {
         wrongPinInputs++;
     }

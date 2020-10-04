@@ -10,9 +10,11 @@ import org.springframework.web.servlet.ModelAndView;
 import ro.sebastianrapa.atmapp.form.CardCreateForm;
 import ro.sebastianrapa.atmapp.model.BankAccount;
 import ro.sebastianrapa.atmapp.model.Card;
+import ro.sebastianrapa.atmapp.model.Log;
 import ro.sebastianrapa.atmapp.model.exception.runtime.BankAccountNotFoundException;
 import ro.sebastianrapa.atmapp.service.BankAccountService;
 import ro.sebastianrapa.atmapp.service.CardService;
+import ro.sebastianrapa.atmapp.service.LogService;
 import ro.sebastianrapa.atmapp.service.ValidationService;
 
 import java.util.List;
@@ -37,6 +39,10 @@ public class CardWebController {
      * Validation Service Interface that will be linked to an implementation
      * */
     private transient final ValidationService validationService;
+    /**
+     * Log Service Interface that will be linked to an implementation
+     * */
+    private transient final LogService logService;
 
 
     /**
@@ -44,10 +50,12 @@ public class CardWebController {
      * */
     public CardWebController(final CardService cardService,
                              final BankAccountService bankAccountService,
-                             final ValidationService validationService) {
+                             final ValidationService validationService,
+                             final LogService logService) {
         this.cardService = cardService;
         this.bankAccountService = bankAccountService;
         this.validationService = validationService;
+        this.logService = logService;
     }
 
 
@@ -88,8 +96,8 @@ public class CardWebController {
             BankAccount account = bankAccountService.getBankAccountByIban(form.getBankAccountIban());
             form.setCardHolderName(account.getHolderName());
         } catch (BankAccountNotFoundException e) {
-            // TODO: Add fail log
-            System.err.println(e.getMessage());
+            // Add fail log
+            logService.addNewLog(new Log(e.getMessage()));
             return redirectToIndexPage();
         }
         // Return the form page giving the errors
@@ -115,8 +123,8 @@ public class CardWebController {
 
         // If there are no Bank Accounts registered, redirect to index page and add a log
         if (bankAccounts.size() <= 0) {
-            // TODO: Add log
-            System.out.println("Creat bank account first");
+            // Add log
+            logService.addNewLog(new Log("Creat bank account first, then you can create a card"));
             return redirectToIndexPage();
         }
 

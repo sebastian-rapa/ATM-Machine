@@ -10,9 +10,11 @@ import ro.sebastianrapa.atmapp.form.BankAccountCreateForm;
 import ro.sebastianrapa.atmapp.form.LinkCardToAccountForm;
 import ro.sebastianrapa.atmapp.model.BankAccount;
 import ro.sebastianrapa.atmapp.model.Card;
+import ro.sebastianrapa.atmapp.model.Log;
 import ro.sebastianrapa.atmapp.model.exception.runtime.BankAccountNotFoundException;
 import ro.sebastianrapa.atmapp.service.BankAccountService;
 import ro.sebastianrapa.atmapp.service.CardService;
+import ro.sebastianrapa.atmapp.service.LogService;
 import ro.sebastianrapa.atmapp.service.ValidationService;
 
 
@@ -37,6 +39,10 @@ public class BankAccountWebController {
      * Validation Service Interface that will be linked to an implementation
      * */
     private transient final ValidationService validationService;
+    /**
+     * Log Service Interface that will be linked to an implementation
+     * */
+    private transient final LogService logService;
 
 
     /**
@@ -44,10 +50,12 @@ public class BankAccountWebController {
      * */
     public BankAccountWebController(final BankAccountService bankAccountService,
                                     final CardService cardService,
-                                    final ValidationService validationService) {
+                                    final ValidationService validationService,
+                                    final LogService logService) {
         this.bankAccountService = bankAccountService;
         this.cardService = cardService;
         this.validationService = validationService;
+        this.logService = logService;
     }
 
     @InitBinder
@@ -144,7 +152,8 @@ public class BankAccountWebController {
         try {
             bankAccount = bankAccountService.getBankAccountByIban(bankAccountIban);
         } catch (BankAccountNotFoundException e) {
-            // TODO: Add log
+            // Add log
+            logService.addNewLog(new Log(e.getMessage()));
             return redirectToIndexPage();
         }
 
@@ -160,8 +169,8 @@ public class BankAccountWebController {
             // Get the bank account
             account = bankAccountService.getBankAccountByIban(bankAccountIban);
         } catch (BankAccountNotFoundException e) {
-            // TODO: Add a log and redirect to index page
-            System.out.println(e.getMessage());
+            // Add log
+            logService.addNewLog(new Log(e.getMessage()));
             return redirectToIndexPage();
         }
 

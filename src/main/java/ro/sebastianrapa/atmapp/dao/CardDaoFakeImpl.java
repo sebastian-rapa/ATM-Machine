@@ -2,7 +2,6 @@ package ro.sebastianrapa.atmapp.dao;
 
 import org.springframework.stereotype.Repository;
 import ro.sebastianrapa.atmapp.model.Card;
-import ro.sebastianrapa.atmapp.model.exception.runtime.CardNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
