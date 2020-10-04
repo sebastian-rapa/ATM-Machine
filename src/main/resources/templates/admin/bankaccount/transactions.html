@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Admin | Bank Account | Link Card</title>
+        <title>Admin | Bank Account | Transactions</title>
         <!--/*/ <th:block th:replace="layouts/admin :: headerSection"> /*/-->
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -24,6 +24,7 @@
             <!-- Side bar Begin -->
             <!--/*/ <th:block th:replace="layouts/admin :: sidebar"> /*/--> <!--/*/ </th:block> /*/-->
             <!-- Side bar End -->
+
             <main class="content">
                 <!-- Nav Bar Begin -->
                 <!--/*/ <th:block th:replace="layouts/admin :: navbar"> /*/--> <!--/*/ </th:block> /*/-->
@@ -39,7 +40,7 @@
                                         </div>
                                         <div class="list-body">
                                             <div class="list-title fs-2x">
-                                                <h3>ATM Machine</h3>
+                                                <h3>Bank Accounts Transactions</h3>
                                             </div>
                                         </div>
                                     </div>
@@ -51,39 +52,24 @@
                 </div>
                 <div class="page-content">
                     <div class="container-fluid">
-                        <div class="card">
-                            <div class="card-header card-header-text card-header-info">
-                                <div class="card-text">
-                                    <h4 class="card-title">Bank Account Information</h4>
-                                </div>
-                            </div>
-                            <div class="card-body table-responsive">
-                                <dl class="row">
-                                    <dt class="col-sm-3">Holder Name</dt>
-                                    <dd class="col-sm-9" th:text="${bankAccount.holderName}">Name</dd>
-
-                                    <dt class="col-sm-3" >IBAN</dt>
-                                    <dd class="col-sm-9" th:text="${bankAccount.iban}">Subdomain</dd>
-
-                                    <dt class="col-sm-3" >Balance</dt>
-                                    <dd class="col-sm-9" th:text="${bankAccount.balance}">Subdomain</dd>
-
-                                    <dt class="col-sm-3">
-                                        <a th:href="@{/customer/atm/deposit}" style="font-size: 1.2rem;color: rgb(91, 194, 54);">
-                                            <i class="fas fa-money-bill-alt"></i>
-                                            <span>Deposit</span></a>
-                                    </dt>
-                                    <dt class="col-sm-3">
-                                        <a th:href="@{/customer/atm/withdraw}" style="font-size: 1.2rem;color: #0492C2;">
-                                            <i class="fas fa-dollar-sign"></i>
-                                            <span>Withdraw</span></a>
-                                    </dt>
-                                </dl>
-                            </div>
-                        </div><!--row-->
+                          <div class="bg-white table-responsive rounded shadow-sm pt-3 pb-3 mb-30">
+                            <table id="data-table" class="table mb-0 table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Details</th>
+                                        <th>Created At</th>
+                                    </tr>
+                                </thead>
+                                <tbody th:each="transaction : ${transactions}">
+                                    <tr>
+                                        <td th:text="${transaction.details}">Nume Detinator</td>
+                                        <td th:text="${transaction.createdAt}">iban</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div><!-- main end-->
-                
+                </div>
             </main><!-- page content end-->
         </div><!-- app's main wrapper end -->
         <!--/*/ <th:block th:replace="layouts/admin :: scripts"> /*/-->
@@ -97,10 +83,5 @@
         <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.js"></script>
         <script src="../../../static/atm_machine_dist/js/plugins-custom/datatables-custom.js"></script>
         <!--/*/ </th:block> /*/-->
-        <script th:inline="javascript">
-            // TODO: Think if this is necessary
-            let cardAuth = [[${cardAuth}]];
-            if (!cardAuth.isAuthenticated) window.location = "/customer/atm/index";
-        </script>
     </body>
 </html>

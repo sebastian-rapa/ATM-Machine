@@ -8,7 +8,7 @@ public class CardAuthentication {
 
     private Card introducedCard;
     private int wrongPinInputs;
-    private boolean isAuthenticated;
+    private boolean requiresAuthentication;
 
     public Card getIntroducedCard() {
         return introducedCard;
@@ -20,7 +20,7 @@ public class CardAuthentication {
         // When introducing a new card reinitialize the number of wrong pin inputs
         this.wrongPinInputs = 0;
         // Set authenticated to false
-        this.isAuthenticated = false;
+        this.requiresAuthentication = false;
     }
 
     public int getWrongPinInputs() {
@@ -28,11 +28,11 @@ public class CardAuthentication {
     }
 
     public boolean isAuthenticated() {
-        return isAuthenticated;
+        return !requiresAuthentication;
     }
 
-    public void setAuthenticated(boolean authenticated) {
-        isAuthenticated = authenticated;
+    public void authenticationRequired(boolean requiresAuthentication) {
+        this.requiresAuthentication = requiresAuthentication;
     }
 
     public void wrongPinAttempt() {
@@ -52,7 +52,7 @@ public class CardAuthentication {
         return "CardAuthentication{" +
                 "introducedCard=" + introducedCard +
                 ", wrongPinInputs=" + wrongPinInputs +
-                ", isAuthenticated=" + isAuthenticated +
+                ", isAuthenticated=" + requiresAuthentication +
                 '}';
     }
 }

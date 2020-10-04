@@ -136,6 +136,24 @@ public class BankAccountWebController {
         return redirectToIndexPage();
     }
 
+    @GetMapping(value = "/transactions-report", params = "bankAccountIban")
+    public ModelAndView transactionsReport(@RequestParam("bankAccountIban") final String bankAccountIban) {
+
+        BankAccount bankAccount;
+
+        try {
+            bankAccount = bankAccountService.getBankAccountByIban(bankAccountIban);
+        } catch (BankAccountNotFoundException e) {
+            // TODO: Add log
+            return redirectToIndexPage();
+        }
+
+        ModelAndView modelAndView = new ModelAndView("admin/bankaccount/transactions");
+        modelAndView.addObject("transactions", bankAccount.getTransactions());
+
+        return modelAndView;
+    }
+
     private ModelAndView getCreateAccountsCardForm(final LinkCardToAccountForm linkCardToAccountForm, final String bankAccountIban){
         BankAccount account;
         try {

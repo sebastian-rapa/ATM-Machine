@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Admin | Bank Account | Link Card</title>
+        <title>Customer | ATM | Deposit</title>
         <!--/*/ <th:block th:replace="layouts/admin :: headerSection"> /*/-->
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -39,7 +39,7 @@
                                         </div>
                                         <div class="list-body">
                                             <div class="list-title fs-2x">
-                                                <h3>ATM Machine</h3>
+                                                <h3>Deposit Money in Bank Account</h3>
                                             </div>
                                         </div>
                                     </div>
@@ -51,34 +51,29 @@
                 </div>
                 <div class="page-content">
                     <div class="container-fluid">
-                        <div class="card">
-                            <div class="card-header card-header-text card-header-info">
-                                <div class="card-text">
-                                    <h4 class="card-title">Bank Account Information</h4>
-                                </div>
-                            </div>
-                            <div class="card-body table-responsive">
-                                <dl class="row">
-                                    <dt class="col-sm-3">Holder Name</dt>
-                                    <dd class="col-sm-9" th:text="${bankAccount.holderName}">Name</dd>
-
-                                    <dt class="col-sm-3" >IBAN</dt>
-                                    <dd class="col-sm-9" th:text="${bankAccount.iban}">Subdomain</dd>
-
-                                    <dt class="col-sm-3" >Balance</dt>
-                                    <dd class="col-sm-9" th:text="${bankAccount.balance}">Subdomain</dd>
-
-                                    <dt class="col-sm-3">
-                                        <a th:href="@{/customer/atm/deposit}" style="font-size: 1.2rem;color: rgb(91, 194, 54);">
-                                            <i class="fas fa-money-bill-alt"></i>
-                                            <span>Deposit</span></a>
-                                    </dt>
-                                    <dt class="col-sm-3">
-                                        <a th:href="@{/customer/atm/withdraw}" style="font-size: 1.2rem;color: #0492C2;">
-                                            <i class="fas fa-dollar-sign"></i>
-                                            <span>Withdraw</span></a>
-                                    </dt>
-                                </dl>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="portlet-box portlet-gutter ui-buttons-col mb-30">
+                                    <form th:action="@{/customer/atm/deposit}"
+                                          th:object="${form}"
+                                          method="POST">
+                                    <div class="portlet-body">
+                                        <div class="form-group">
+                                            <label for="depositAmount">Deposit amount</label>
+                                            <input id="depositAmount"
+                                                   th:field="*{depositAmount}"
+                                                   type="text"
+                                                   class="form-control">
+                                            <label class="error" for="depositAmount"
+                                                   th:if="${#fields.hasErrors('depositAmount')}"
+                                                   th:errors="*{depositAmount}">Error</label>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                    </form>
+                                </div><!--portlet-->
                             </div>
                         </div><!--row-->
                     </div>
@@ -97,10 +92,10 @@
         <script type="text/javascript" src="../../../static/atm_machine_dist/lib/data-tables/responsive.bootstrap4.min.js"></script>
         <script src="../../../static/atm_machine_dist/js/plugins-custom/datatables-custom.js"></script>
         <!--/*/ </th:block> /*/-->
-        <script th:inline="javascript">
-            // TODO: Think if this is necessary
-            let cardAuth = [[${cardAuth}]];
-            if (!cardAuth.isAuthenticated) window.location = "/customer/atm/index";
+        <script>
+            $(document).ready(function () {
+                $(".select2").select2();
+            })
         </script>
     </body>
 </html>

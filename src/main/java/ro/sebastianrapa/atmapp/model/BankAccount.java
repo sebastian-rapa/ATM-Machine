@@ -3,7 +3,9 @@ package ro.sebastianrapa.atmapp.model;
 import ro.sebastianrapa.atmapp.form.BankAccountCreateForm;
 import ro.sebastianrapa.atmapp.model.exception.runtime.NotSufficientFundsException;
 
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class BankAccount {
@@ -17,6 +19,7 @@ public class BankAccount {
     private final String holderName;
     private final Currency currency;
     private long balance;
+    private List<Transaction> transactions;
 
     public BankAccount(final BankAccountCreateForm form) {
         holderName = form.getBankAccountHolderName();
@@ -39,6 +42,18 @@ public class BankAccount {
 
     public long getBalance() {
         return balance;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void addTransaction(Transaction transaction) {
+        if (null == transactions) {
+            transactions = new ArrayList<>();
+        }
+
+        transactions.add(transaction);
     }
 
     public void deposit(final long amountToDeposit) {

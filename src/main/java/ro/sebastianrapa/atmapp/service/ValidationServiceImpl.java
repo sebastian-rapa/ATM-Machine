@@ -56,4 +56,31 @@ public class ValidationServiceImpl implements ValidationService {
         return pinCode < 1000 || pinCode > 9999;
     }
 
+    @Override
+    public void validateDepositAmount(String depositAmount, BindingResult bindingResult) {
+        int depositAmountAsInt;
+
+        try {
+            depositAmountAsInt = Integer.parseInt(depositAmount);
+            if (depositAmountAsInt <= 0) {
+                bindingResult.rejectValue("depositAmount", "deposit.amount.error", "The deposited amount must be a positive number.");
+            }
+        } catch (NumberFormatException e) {
+            bindingResult.rejectValue("depositAmount", "deposit.amount.error", "The deposited amount must be composed out of numbers");
+        }
+    }
+
+    @Override
+    public void validateWithdrawAmount(String withdrawAmount, BindingResult bindingResult) {
+        int depositAmountAsInt;
+
+        try {
+            depositAmountAsInt = Integer.parseInt(withdrawAmount);
+            if (depositAmountAsInt <= 0) {
+                bindingResult.rejectValue("withdrawAmount", "withdraw.amount.error", "The withdraw amount must be a positive number.");
+            }
+        } catch (NumberFormatException e) {
+            bindingResult.rejectValue("withdrawAmount", "withdraw.amount.error", "The withdraw amount must be composed out of numbers");
+        }
+    }
 }

@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ro.sebastianrapa.atmapp.config.CardAuthenticationConfig;
 import ro.sebastianrapa.atmapp.form.CardLoginForm;
+import ro.sebastianrapa.atmapp.form.DepositForm;
+import ro.sebastianrapa.atmapp.form.WithdrawForm;
 import ro.sebastianrapa.atmapp.model.BankAccount;
 import ro.sebastianrapa.atmapp.model.Card;
 import ro.sebastianrapa.atmapp.model.exception.runtime.BankAccountNotFoundException;
 import ro.sebastianrapa.atmapp.model.exception.runtime.CardNotFoundException;
+import ro.sebastianrapa.atmapp.model.exception.runtime.NotSufficientFundsException;
 import ro.sebastianrapa.atmapp.security.CardAuthentication;
 import ro.sebastianrapa.atmapp.service.ATMService;
 import ro.sebastianrapa.atmapp.service.BankAccountService;
@@ -20,6 +23,8 @@ import ro.sebastianrapa.atmapp.service.ValidationService;
 @Controller
 @RequestMapping("customer/atm")
 public class ATMController {
+
+    private static final boolean REQUIRES_AUTH = true;
 
     private transient final ATMService atmService;
     private transient final BankAccountService bankAccountService;
@@ -47,7 +52,6 @@ public class ATMController {
 
         return modelAndView;
     }
-
 
     @GetMapping(value = "/introduce-card", params = "cardNumber")
     public ModelAndView introduceCard(@RequestParam final String cardNumber,
@@ -93,9 +97,8 @@ public class ATMController {
             return getIntroducedCardPage(cardNumber, form);
         }
 
-        // TODO: Think if this is useful?!
         // Successfully authenticate this card
-        cardAuth.setAuthenticated(true);
+        cardAuth.authenticationRequired(!REQUIRES_AUTH);
 
         // Get the bank account associated with this card
         BankAccount associatedAccount;
@@ -110,6 +113,120 @@ public class ATMController {
         ModelAndView modelAndView = new ModelAndView("/customer/atm/authenticated");
         modelAndView.addObject("bankAccount", associatedAccount);
 
+        return modelAndView;
+    }
+
+    @GetMapping("/deposit")
+    public ModelAndView deposit(@ModelAttribute("form") final DepositForm form) {
+        // Get deposit form
+        return getDepositForm(form);
+    }
+
+    @PostMapping("/deposit")
+    public ModelAndView depositConfirmed(@ModelAttribute("form") final DepositForm form,
+                                         final BindingResult bindingResult) {
+        String depositAmount = form.getDepositAmount();
+
+        // Validate deposit amount
+        validationService.validateDepositAmount(depositAmount, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            // TODO: Add log
+            return getDepositForm(form);
+        }
+        // Get the bank account iban of the authenticated card
+        String bankAccountIban = cardAuthConfig.getCardAuthentication()
+                                               .getIntroducedCard()
+                                               .getBankAccountIban();
+        // Get the bank account associated with the card
+        BankAccount accountToDepositOn;
+        try {
+            accountToDepositOn = bankAccountService.getBankAccountByIban(bankAccountIban);
+        } catch (BankAccountNotFoundException e) {
+            // TODO: Add log
+            return redirectToIndexPage();
+        }
+        // Make the deposit
+        atmService.deposit(accountToDepositOn, Integer.parseInt(depositAmount));
+
+        // Log out the card
+        cardAuthConfig.getCardAuthentication()
+                      .authenticationRequired(REQUIRES_AUTH);
+
+        return redirectToIndexPage();
+    }
+    
+    @GetMapping("/withdraw")
+    public ModelAndView withdraw(@ModelAttribute("form") final WithdrawForm form) {
+        // Get withdraw form
+        return getWithdrawForm(form);
+    }
+
+    @PostMapping("/withdraw")
+    public ModelAndView withdrawConfirmed(@ModelAttribute("form") final WithdrawForm form,
+                                         final BindingResult bindingResult) {
+        String withdrawAmount = form.getWithdrawAmount();
+
+        // Validate withdraw amount
+        validationService.validateWithdrawAmount(withdrawAmount, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            // TODO: Add log
+            return getWithdrawForm(form);
+        }
+        // Get the bank account iban of the authenticated card
+        String bankAccountIban = cardAuthConfig.getCardAuthentication()
+                                               .getIntroducedCard()
+                                               .getBankAccountIban();
+        // Get the bank account associated with the card
+        BankAccount accountToWithdrawFrom;
+        try {
+            accountToWithdrawFrom = bankAccountService.getBankAccountByIban(bankAccountIban);
+        } catch (BankAccountNotFoundException e) {
+            // TODO: Add log
+            return redirectToIndexPage();
+        }
+        // Make the withdraw
+        try {
+            atmService.withdraw(accountToWithdrawFrom, Integer.parseInt(withdrawAmount));
+        } catch (NotSufficientFundsException e) {
+            // TODO: Add log
+            bindingResult.rejectValue("withdrawAmount", "withdraw.too.large.error", "Not sufficient funds");
+            return getWithdrawForm(form);
+        }
+
+        // Log out the card
+        cardAuthConfig.getCardAuthentication()
+                      .authenticationRequired(REQUIRES_AUTH);
+
+        return redirectToIndexPage();
+    }
+    
+    
+
+    private ModelAndView getDepositForm(DepositForm form) {
+        CardAuthentication cardAuth = cardAuthConfig.getCardAuthentication();
+
+        if (!cardAuth.isAuthenticated()) {
+            // TODO: Add log
+            return redirectToIndexPage();
+        }
+
+        ModelAndView modelAndView = new ModelAndView("customer/atm/deposit");
+        modelAndView.addObject("form", form);
+        return modelAndView;
+    }
+
+    private ModelAndView getWithdrawForm(WithdrawForm form) {
+        CardAuthentication cardAuth = cardAuthConfig.getCardAuthentication();
+
+        if (!cardAuth.isAuthenticated()) {
+            // TODO: Add log
+            return redirectToIndexPage();
+        }
+
+        ModelAndView modelAndView = new ModelAndView("customer/atm/withdraw");
+        modelAndView.addObject("form", form);
         return modelAndView;
     }
 
