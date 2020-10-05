@@ -1,13 +1,13 @@
-#ATM Machine
+# ATM Machine
 
 ## Project Description
 > It is a __Spring Boot App__;  
 > The app simulates an __ATM Machine__;  
->###Basic functionalities 
+### Basic functionalities 
 > - `deposit` money on a bank account;
 > - `withdraw` money from a bank account;
-> - `query` a bank account's balance;
->###Technologies used
+> - `query` a bank account's balance;  
+### Technologies used
 > - `thymeleaf` template engine used to render *HTML* files at `Runtime`
 > - `SpringBoot` includes `Spring MVC` used to make the project a `web application`
 > - `java 11` provides multiple functionalities when working with the stream API
@@ -22,7 +22,7 @@
 >>  - Preinstalled software requirements: `JRE` and `maven`
 
 ## Endpoints
-###ATM  
+### ATM  
 > `HTTP GET request` __"/customer/atm/index"__
 > - This endpoint loads an HTML page and provides a list of all the cards;
 > - On each card you can click a button to __introduce__ it in the *ATM Machine*  
@@ -42,7 +42,7 @@
 > - It loads an HTML and attaches to it a form to get from the user the amount desired to be withdrawn from the bank account;
 > - On submit validates user input
 
-###Bank Account
+### Bank Account
 > `HTTP GET request` __"/admin/bank-account/index"__
 > - This endpoint loads an HTML page and provides a list of all the Bank Accounts;
 > - On each bank account you can click a button to __Add a card__, and  a button to see the bank account's __Transactions__
@@ -60,7 +60,7 @@
 > `HTTP GET request` __"/admin/bank-account/transactions-report"__
 > - This endpoint loads an HTML file and attaches to it a list of all the `transactions` associated with a bank account
 
-###Card
+### Card
 > `HTTP GET request` __"/admin/card/index"__
 > - This endpoint loads an HTML page and provides a list of all the cards;
 > `HTTP GET request` __"/admin/card/create"__
@@ -69,7 +69,7 @@
 > - Validates user input 
 > - Creates a new card with the given information  
 >
-###Log
+### Log
 > `HTTP GET request` __"/admin/card/index"__
 > - This endpoint loads an HTML page and provides a list of all the logs;
 > - A Log it's added when something goes wrong, such as not finding a card/bank account, trying to enter a wrong pin code for more than 3 times etc. 
