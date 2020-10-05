@@ -66,7 +66,7 @@
                                     <dd class="col-sm-9" th:text="${bankAccount.iban}">Subdomain</dd>
 
                                     <dt class="col-sm-3" >Balance</dt>
-                                    <dd class="col-sm-9" th:text="${bankAccount.balance}">Subdomain</dd>
+                                    <dd class="col-sm-9" th:text="${bankAccount.balance} + ' ' +  ${bankAccount.currency.toString()}"></dd>
 
                                     <dt class="col-sm-3">
                                         <a th:href="@{/customer/atm/deposit}" style="font-size: 1.2rem;color: rgb(91, 194, 54);">

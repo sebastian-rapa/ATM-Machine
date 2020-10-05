@@ -112,7 +112,7 @@ class CardTest {
         // Convert the string month to an integer
         final int integerMonth = Integer.parseInt(monthAndYear[0]);
         // Make sure the month is not smaller than 1
-        assertTrue(integerMonth > MONTH_LOW_BOUND, "The number of the month should be grater than 1");
+        assertTrue(integerMonth >= MONTH_LOW_BOUND, "The number of the month should be grater than 0");
         // Make sure the month is bigger than 12
         assertTrue(integerMonth < MONTH_HIGH_BOUND, "The number of the month should be less than 13");
         // Convert the string year to an integer

@@ -12,12 +12,14 @@
     </parent>
 
     <groupId>ro.sebastianrapa</groupId>
-    <artifactId>ATM Machine</artifactId>
-    <version>1.0-ATM Machine</version>
+    <artifactId>atmapp</artifactId>
+    <version>1.0-atm-machine</version>
 
     <properties>
         <java.version>11</java.version>
     </properties>
+
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

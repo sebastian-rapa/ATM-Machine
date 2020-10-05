@@ -49,7 +49,7 @@ public class ATMController {
     @GetMapping("/index")
     public ModelAndView index() {
 
-        ModelAndView modelAndView = new ModelAndView("customer/atm/index");
+        final ModelAndView modelAndView = new ModelAndView("customer/atm/index");
         modelAndView.addObject("cards", cardService.fetchAllCards());
 
         return modelAndView;
@@ -61,15 +61,15 @@ public class ATMController {
         return getIntroducedCardPage(cardNumber, form);
     }
 
-    @PostMapping(value = "/authenticate-card")
-    public ModelAndView modelAndView(@ModelAttribute("form") CardLoginForm form,
-                                     BindingResult bindingResult) {
+    @PostMapping("/authenticate-card")
+    public ModelAndView modelAndView(@ModelAttribute("form") final CardLoginForm form,
+                                     final BindingResult bindingResult) {
 
-        CardAuthentication cardAuth = cardAuthConfig.getCardAuthentication();
+        final CardAuthentication cardAuth = cardAuthConfig.getCardAuthentication();
 
-        String introducedPin = form.getPinCode();
-        Card introducedCard = cardAuth.getIntroducedCard();
-        String cardNumber = introducedCard.getCardNumber();
+        final String introducedPin = form.getPinCode();
+        final Card introducedCard = cardAuth.getIntroducedCard();
+        final String cardNumber = introducedCard.getCardNumber();
 
         // Validate the pin code format
         validationService.validatePinCodeFormat(introducedPin, bindingResult);
@@ -81,9 +81,10 @@ public class ATMController {
 
         // Check if the pin code is correct
         if (!introducedCard.checkPinCode(introducedPin)) {
-            bindingResult.rejectValue("pinCode", "wrong.pin.code.error", "Wrong ping code introduced. Attempts left: " + cardAuth.getAttemptsLeft());
             // Count the wrong input
             cardAuth.wrongPinAttempt();
+            // Add an error message
+            bindingResult.rejectValue("pinCode", "wrong.pin.code.error", "Wrong ping code introduced. Attempts left: " + cardAuth.getAttemptsLeft());
             // Check if there were to many wrong attempts
             if (cardAuth.tooManyWrongAttempts()) {
                 // Block Card
@@ -101,7 +102,7 @@ public class ATMController {
         cardAuth.authenticationRequired(!REQUIRES_AUTH);
 
         // Get the bank account associated with this card
-        BankAccount associatedAccount;
+        final BankAccount associatedAccount;
         try {
             associatedAccount = bankAccountService.getBankAccountByIban(introducedCard.getBankAccountIban());
         } catch (BankAccountNotFoundException e) {
@@ -111,7 +112,7 @@ public class ATMController {
             return redirectToIndexPage();
         }
         // Load the authenticated HTML file
-        ModelAndView modelAndView = new ModelAndView("/customer/atm/authenticated");
+        final ModelAndView modelAndView = new ModelAndView("/customer/atm/authenticated");
         modelAndView.addObject("bankAccount", associatedAccount);
 
         return modelAndView;
@@ -126,7 +127,7 @@ public class ATMController {
     @PostMapping("/deposit")
     public ModelAndView depositConfirmed(@ModelAttribute("form") final DepositForm form,
                                          final BindingResult bindingResult) {
-        String depositAmount = form.getDepositAmount();
+        final String depositAmount = form.getDepositAmount();
 
         // Validate deposit amount
         validationService.validateDepositAmount(depositAmount, bindingResult);
@@ -135,11 +136,11 @@ public class ATMController {
             return getDepositForm(form);
         }
         // Get the bank account iban of the authenticated card
-        String bankAccountIban = cardAuthConfig.getCardAuthentication()
+        final String bankAccountIban = cardAuthConfig.getCardAuthentication()
                                                .getIntroducedCard()
                                                .getBankAccountIban();
         // Get the bank account associated with the card
-        BankAccount accountToDepositOn;
+        final BankAccount accountToDepositOn;
         try {
             accountToDepositOn = bankAccountService.getBankAccountByIban(bankAccountIban);
         } catch (BankAccountNotFoundException e) {
@@ -166,7 +167,7 @@ public class ATMController {
     @PostMapping("/withdraw")
     public ModelAndView withdrawConfirmed(@ModelAttribute("form") final WithdrawForm form,
                                          final BindingResult bindingResult) {
-        String withdrawAmount = form.getWithdrawAmount();
+        final String withdrawAmount = form.getWithdrawAmount();
 
         // Validate withdraw amount
         validationService.validateWithdrawAmount(withdrawAmount, bindingResult);
@@ -175,11 +176,11 @@ public class ATMController {
             return getWithdrawForm(form);
         }
         // Get the bank account iban of the authenticated card
-        String bankAccountIban = cardAuthConfig.getCardAuthentication()
+        final String bankAccountIban = cardAuthConfig.getCardAuthentication()
                                                .getIntroducedCard()
                                                .getBankAccountIban();
         // Get the bank account associated with the card
-        BankAccount accountToWithdrawFrom;
+        final BankAccount accountToWithdrawFrom;
         try {
             accountToWithdrawFrom = bankAccountService.getBankAccountByIban(bankAccountIban);
         } catch (BankAccountNotFoundException e) {
